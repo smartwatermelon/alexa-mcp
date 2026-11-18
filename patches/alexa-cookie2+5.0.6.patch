@@ -1,0 +1,16 @@
+--- a/node_modules/alexa-cookie2/lib/proxy.js
++++ b/node_modules/alexa-cookie2/lib/proxy.js
+@@ -423,6 +423,13 @@
+     }
+ 
+     function onProxyRes(proxyRes, req, res) {
++        // LOCAL PATCH (alexa-mcp review, 2026-11-17): Amazon's /ax/claim sign-in page sends
++        // CSP upgrade-insecure-requests, which makes the browser POST to https://<proxy>,
++        // where the plain-HTTP proxy cannot answer. Drop it (and HSTS) for the loopback proxy.
++        if (proxyRes && proxyRes.headers) {
++            delete proxyRes.headers['content-security-policy'];
++            delete proxyRes.headers['strict-transport-security'];
++        }
+         const url = req.originalUrl || req.url;
+         if (url.endsWith('.ico') || url.endsWith('.js') || url.endsWith('.ttf') || url.endsWith('.svg') || url.endsWith('.png') || url.endsWith('.appcache')) return;
+         if (url.startsWith('/ap/uedata')) return;

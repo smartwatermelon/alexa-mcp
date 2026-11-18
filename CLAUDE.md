@@ -99,7 +99,8 @@ This file and the items below are local; do not commit or push them (origin is a
 - `node_modules/alexa-cookie2/lib/proxy.js` is patched in `onProxyRes` to delete the
   `content-security-policy` and `strict-transport-security` headers. Without it, Amazon's `/ax/claim`
   sign-in page sends `upgrade-insecure-requests`, and the browser posts the email form to
-  `https://127.0.0.1:<port>`, which fails. `npm ci` removes the patch; re-apply before `npm run auth`.
+  `https://127.0.0.1:<port>`, which fails. `npm ci` removes the patch; re-apply before `npm run auth`
+  with `git apply patches/alexa-cookie2+5.0.6.patch` (saved on the local branch `local/install`).
 - Run `npm run auth` in a separate terminal: it prints the refresh token and device keys to stderr.
 - Inside the Claude Code Bash sandbox, the login proxy and live API calls fail with `EPERM`; they
   need the sandbox disabled.
