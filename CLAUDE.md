@@ -89,18 +89,19 @@ npm run smoke                      # read devices/routines/scenes with the store
 
 ## Local install status (this checkout only — not upstream)
 
-This file and the items below are local; do not commit or push them (origin is a third-party repo).
+This file and the items below live only on branch `local/install`, pushed to the `fork` remote
+(smartwatermelon/alexa-mcp). Never push them to `origin` or include them in an upstream PR.
 
 - Installed as a **user-scope, read-only** MCP server `alexa` (no `ALEXA_MCP_ALLOW_WRITE`), with
   `ALEXA_MCP_AMAZON_PAGE=amazon.com`, `ALEXA_MCP_ACCEPT_LANGUAGE=en-US`,
   `ALEXA_MCP_PROXY_BIND=127.0.0.1`, `ALEXA_MCP_AUTH_PATH=~/.local/state/alexa-mcp/alexa.json`.
   Live-verified 2026-11-17: all 15 read tools work.
-- `package-lock.json` bumps `alexa-cookie2` 5.0.5 → 5.0.6 (uncommitted).
+- `package-lock.json` bumps `alexa-cookie2` 5.0.5 → 5.0.6 (committed only on `local/install`).
 - `node_modules/alexa-cookie2/lib/proxy.js` is patched in `onProxyRes` to delete the
   `content-security-policy` and `strict-transport-security` headers. Without it, Amazon's `/ax/claim`
   sign-in page sends `upgrade-insecure-requests`, and the browser posts the email form to
   `https://127.0.0.1:<port>`, which fails. `npm ci` removes the patch; re-apply before `npm run auth`
-  with `git apply patches/alexa-cookie2+5.0.6.patch` (saved on the local branch `local/install`).
+  with `git apply patches/alexa-cookie2+5.0.6.patch` (saved on branch `local/install`).
 - Run `npm run auth` in a separate terminal: it prints the refresh token and device keys to stderr.
 - Inside the Claude Code Bash sandbox, the login proxy and live API calls fail with `EPERM`; they
   need the sandbox disabled.
